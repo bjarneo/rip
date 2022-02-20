@@ -11,7 +11,7 @@ import (
 
 // ulimit -n 12000
 // socket: too many open files
-func request(url string) {
+func fetch(url string) {
 	resp, err := http.Get(url)
 
 	if err != nil {
@@ -29,7 +29,7 @@ func request(url string) {
 	*/
 }
 
-func worker(wg *sync.WaitGroup, url string) func() chan string {
+func request(wg *sync.WaitGroup, url string) func() chan string {
 	ch := make(chan string)
 
 	// Return as closure, and execute the goroutine at a later stage
@@ -39,21 +39,15 @@ func worker(wg *sync.WaitGroup, url string) func() chan string {
 			defer wg.Done()
 			defer close(ch)
 
-			request(url)
+			fetch(url)
 		}()
 
 		return ch
 	}
 }
 
-func main() {
-	url := flag.String("url", "", "The url you want to load test")
-	concurrent := flag.Int("concurrent", 10, "How many concurrent users to simulate")
-	requests := flag.Int("requests", 1, "How many requests per concurrent user")
-
-	flag.Parse()
-
-	p, _ := pterm.DefaultProgressbar.WithTotal(*concurrent * *requests).WithTitle(fmt.Sprintf("Load testing %s", *url)).Start()
+func worker(concurrent int, requests int, url string) {
+	p, _ := pterm.DefaultProgressbar.WithTotal(concurrent * requests).WithTitle(fmt.Sprintf("Load testing %s", url)).Start()
 
 	var wg sync.WaitGroup
 
@@ -66,11 +60,11 @@ func main() {
 		3. Append the worker to the deferred channel slice
 
 		However, what we really want is to create *concurrent
-		worker groups, then execute the requests concurrently.
+		wait groups, then execute the requests split up in the X concurrent wait groups.
 	*/
-	for j := 0; j < *requests**concurrent; j++ {
+	for j := 0; j < concurrent*requests; j++ {
 		wg.Add(1)
-		deferred = append(deferred, worker(&wg, *url))
+		deferred = append(deferred, request(&wg, url))
 	}
 
 	// Now we execute all the channels with the workers
@@ -81,6 +75,16 @@ func main() {
 	}
 
 	wg.Wait()
+}
+
+func main() {
+	url := flag.String("url", "", "The url you want to load test")
+	concurrent := flag.Int("concurrent", 10, "How many concurrent users to simulate")
+	requests := flag.Int("requests", 1, "How many requests per concurrent user")
+
+	flag.Parse()
+
+	worker(*concurrent, *requests, *url)
 
 	pterm.Success.Println("Done")
 }
