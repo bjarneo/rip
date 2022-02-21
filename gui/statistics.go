@@ -8,7 +8,7 @@ import (
 )
 
 func PrintTable(stats statistics.Statistics, url string) {
-	pterm.DefaultBasicText.Println("[Transaction statistics]")
+	pterm.DefaultBasicText.Println("\n[Transaction statistics]")
 
 	pterm.DefaultTable.WithHasHeader().WithData(
 		pterm.TableData{

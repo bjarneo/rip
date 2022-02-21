@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"sync"
 
 	"github.com/bjarneo/rip/gui"
@@ -54,6 +55,9 @@ func request(url string) bool {
 }
 
 func workers(concurrent int, interval int, url string) {
+	// Let us start the timer for how long the workers are running
+	start := utils.NowUnixMilli()
+
 	end := utils.FutureUnixMilli(interval)
 
 	var wg sync.WaitGroup
@@ -74,30 +78,39 @@ func workers(concurrent int, interval int, url string) {
 	}
 
 	wg.Wait()
+
+	// End the timer for how long the workers are running
+	stop := utils.NowUnixMilli()
+
+	stats.SetElapsedTime(stop - start)
 }
 
 func main() {
-	url := flag.String("url", "", "The url you want to load test")
+	// Custom cli flags
 	concurrent := flag.Int("concurrent", 10, "How many concurrent users to simulate")
 	interval := flag.Int("interval", 60, "How many seconds to run the test")
 
 	flag.Parse()
 
-	start := utils.NowUnixMilli()
+	// The URL you want to load test
+	url := flag.Arg(0)
+	if url == "" {
+		fmt.Print("No URL provided. Example: $ rip https://www.google.com")
 
-	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Load testing %s", *url))
+		os.Exit(1)
+	}
+
+	fmt.Println(*concurrent)
+	fmt.Println(*interval)
+
+	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Load testing %s", url))
 
 	// Run until the interval is done
-	workers(*concurrent, *interval, *url)
+	workers(*concurrent, *interval, url)
 
 	spinner.Success()
 
 	pterm.Success.Println("Done")
 
-	stop := utils.NowUnixMilli()
-
-	stats.SetElapsedTime(stop - start)
-
-	pterm.Println("")
-	gui.PrintTable(stats, *url)
+	gui.PrintTable(stats, url)
 }
