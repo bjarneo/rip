@@ -98,5 +98,6 @@ func main() {
 
 	stats.SetElapsedTime(stop - start)
 
+	pterm.Println("")
 	gui.PrintTable(stats, *url)
 }
