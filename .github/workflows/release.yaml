@@ -33,7 +33,7 @@ jobs:
           binary_name: ${{ env.BINARY_NAME }}
           sha256sum: TRUE
   release-darwin:
-    name: release linux/386
+    name: release darwin/amd64
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -46,7 +46,7 @@ jobs:
           binary_name: ${{ env.BINARY_NAME }}
           sha256sum: TRUE
   release-windows:
-    name: release linux/386
+    name: release windows/amd64
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
