@@ -3,9 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"net/http"
 	"sync"
 
+	"github.com/bjarneo/rip/gui"
 	"github.com/bjarneo/rip/statistics"
 	"github.com/bjarneo/rip/utils"
 	"github.com/pterm/pterm"
@@ -15,26 +17,40 @@ var stats statistics.Statistics = statistics.NewStatistics()
 
 // ulimit -n 12000
 // socket: too many open files
-func fetch(url string) {
+func request(url string) bool {
+	start := utils.NowUnixMilli()
+
 	stats.SetTotal(1)
 
 	resp, err := http.Get(url)
 
 	if err != nil {
 		stats.SetFailed(1)
+
+		return false
 	}
+
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		stats.SetFailed(1)
+
+		return false
+	}
+
+	stats.SetDataTransferred(len(body))
 
 	stats.SetSuccessful(1)
 
+	stop := utils.NowUnixMilli()
+
+	stats.SetResponseTime(stop - start)
+	stats.SetShortest(stop - start)
+	stats.SetLongest(stop - start)
+
 	defer resp.Body.Close()
 
-	/*
-		body, err := io.ReadAll(resp.Body)
-
-		if err != nil {
-			panic(err)
-		}
-	*/
+	return true
 }
 
 func workers(concurrent int, interval int, url string) {
@@ -52,14 +68,12 @@ func workers(concurrent int, interval int, url string) {
 					break
 				}
 
-				fetch(url)
+				request(url)
 			}
 		}()
 	}
 
 	wg.Wait()
-
-	fmt.Println(stats)
 }
 
 func main() {
@@ -69,6 +83,8 @@ func main() {
 
 	flag.Parse()
 
+	start := utils.NowUnixMilli()
+
 	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Load testing %s", *url))
 
 	// Run until the interval is done
@@ -77,4 +93,10 @@ func main() {
 	spinner.Success()
 
 	pterm.Success.Println("Done")
+
+	stop := utils.NowUnixMilli()
+
+	stats.SetElapsedTime(stop - start)
+
+	gui.PrintTable(stats, *url)
 }
