@@ -107,9 +107,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(*concurrent)
-	fmt.Println(*interval)
-
 	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Load testing %s", url))
 
 	// Run until the interval is done

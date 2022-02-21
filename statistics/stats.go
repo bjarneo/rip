@@ -1,5 +1,9 @@
 package statistics
 
+import "sync"
+
+var mu sync.Mutex
+
 type Statistics struct {
 	total           int64
 	successful      int64
@@ -27,6 +31,9 @@ func NewStatistics() Statistics {
 }
 
 func (stats *Statistics) SetTotal(total int64) {
+	mu.Lock()
+	defer mu.Unlock()
+
 	stats.total += total
 }
 
@@ -35,6 +42,9 @@ func (stats *Statistics) Total() int64 {
 }
 
 func (stats *Statistics) SetSuccessful(successful int64) {
+	mu.Lock()
+	defer mu.Unlock()
+
 	stats.successful += successful
 }
 
@@ -43,6 +53,9 @@ func (stats *Statistics) Successful() int64 {
 }
 
 func (stats *Statistics) SetFailure(failed int64) {
+	mu.Lock()
+	defer mu.Unlock()
+
 	stats.failed += failed
 }
 
@@ -100,6 +113,9 @@ func (stats *Statistics) ResponseTime() int {
 }
 
 func (stats *Statistics) SetDataTransferred(dataTransferred int) {
+	mu.Lock()
+	defer mu.Unlock()
+
 	stats.dataTransferred += dataTransferred
 }
 
