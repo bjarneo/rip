@@ -114,8 +114,8 @@ func workers(concurrent int, interval int, url string) {
 
 func main() {
 	// Custom cli flags
-	concurrent := flag.Int("concurrent", 10, "How many concurrent users to simulate")
-	interval := flag.Int("interval", 60, "How many seconds to run the test")
+	concurrent := flag.Int("c", 10, "How many concurrent users to simulate")
+	interval := flag.Int("t", 60, "How many seconds to run the test")
 
 	flag.Parse()
 
