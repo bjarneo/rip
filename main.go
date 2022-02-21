@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/bjarneo/rip/gui"
 	"github.com/bjarneo/rip/statistics"
@@ -64,27 +65,46 @@ func request(url string) bool {
 func workers(concurrent int, interval int, url string) {
 	// Let us start the timer for how long the workers are running
 	start := utils.NowUnixMilli()
-
 	end := utils.FutureUnixMilli(interval)
+
+	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Load testing %s", url))
 
 	var wg sync.WaitGroup
 
-	for j := 0; j < concurrent; j++ {
+	// Start the wait groups
+	for i := 0; i < concurrent; i++ {
 		wg.Add(1)
 
+		// run the concurrent go routines
 		go func() {
 			for {
-				if utils.NowUnixMilli() >= end {
-					wg.Done()
-					break
-				}
-
 				request(url)
 			}
 		}()
 	}
 
+	// This loop will run until the end is reached
+	// then it will close the wait groups and break the loop
+	for {
+		// Run the for loop once a second
+		time.Sleep(time.Second * time.Duration(1))
+
+		if utils.NowUnixMilli() < end {
+			continue
+		}
+
+		// Close all the concurrent wait groups
+		for i := 0; i < concurrent; i++ {
+			wg.Done()
+		}
+
+		break
+	}
+
+	// Block until wait groups has been closed
 	wg.Wait()
+
+	spinner.Success()
 
 	// End the timer for how long the workers are running
 	stop := utils.NowUnixMilli()
@@ -107,14 +127,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Load testing %s", url))
-
 	// Run until the interval is done
 	workers(*concurrent, *interval, url)
-
-	spinner.Success()
-
-	pterm.Success.Println("Done")
 
 	gui.PrintTable(stats, url)
 }
