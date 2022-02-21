@@ -42,11 +42,11 @@ func (stats *Statistics) Successful() int64 {
 	return stats.successful
 }
 
-func (stats *Statistics) SetFailed(failed int64) {
+func (stats *Statistics) SetFailure(failed int64) {
 	stats.failed += failed
 }
 
-func (stats *Statistics) Failed() int64 {
+func (stats *Statistics) Failure() int64 {
 	return stats.failed
 }
 

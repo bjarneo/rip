@@ -14,10 +14,16 @@ import (
 	"github.com/pterm/pterm"
 )
 
+// Initialize our statistics
 var stats statistics.Statistics = statistics.NewStatistics()
 
-// ulimit -n 12000
-// socket: too many open files
+/*
+	If you for some reason end up in a situation where you get
+	this error message: "socket: too many open files"
+
+	try to set ulimit to a higher number.
+	$ ulimit -n 12000
+*/
 func request(url string) bool {
 	start := utils.NowUnixMilli()
 
@@ -26,7 +32,7 @@ func request(url string) bool {
 	resp, err := http.Get(url)
 
 	if err != nil {
-		stats.SetFailed(1)
+		stats.SetFailure(1)
 
 		return false
 	}
@@ -34,7 +40,7 @@ func request(url string) bool {
 	body, err := io.ReadAll(resp.Body)
 
 	if err != nil {
-		stats.SetFailed(1)
+		stats.SetFailure(1)
 
 		return false
 	}
@@ -45,6 +51,7 @@ func request(url string) bool {
 
 	stop := utils.NowUnixMilli()
 
+	// Update all of our time statistics
 	stats.SetResponseTime(stop - start)
 	stats.SetShortest(stop - start)
 	stats.SetLongest(stop - start)
