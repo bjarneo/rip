@@ -1,0 +1,60 @@
+on:
+  release:
+    types: [created]
+env:
+  BINARY_NAME: rip
+  GO_VERSION: latest
+
+jobs:
+  release-linux-amd64:
+    name: release linux/amd64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: wangyoucao577/go-release-action@v1.24
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: linux
+          goarch: amd64
+          goversion: ${{ env.GO_VERSION }}
+          binary_name: ${{ env.BINARY_NAME }}
+          sha256sum: TRUE
+  release-linux-386:
+    name: release linux/386
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: wangyoucao577/go-release-action@v1.24
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: linux
+          goarch: 386
+          goversion: ${{ env.GO_VERSION }}
+          binary_name: ${{ env.BINARY_NAME }}
+          sha256sum: TRUE
+  release-darwin:
+    name: release linux/386
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: wangyoucao577/go-release-action@v1.24
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: darwin
+          goarch: amd64
+          goversion: ${{ env.GO_VERSION }}
+          binary_name: ${{ env.BINARY_NAME }}
+          sha256sum: TRUE
+  release-windows:
+    name: release linux/386
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: wangyoucao577/go-release-action@v1.24
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: windows
+          goarch: amd64
+          goversion: ${{ env.GO_VERSION }}
+          binary_name: ${{ env.BINARY_NAME }}
+          sha256sum: TRUE
