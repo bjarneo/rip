@@ -54,6 +54,14 @@ go build
 rip http://localhost:1337
 ```
 
+## Troubleshooting
+
+If you get this error message `socket: too many open files`, you might want to increase your ulimit to a higher number.
+
+```bash
+ulimit -n 12000
+```
+
 ## LICENSE
 
 See [LICENSE](./LICENSE)
