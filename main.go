@@ -1,11 +1,9 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"sync"
 	"time"
 
@@ -15,8 +13,14 @@ import (
 	"github.com/pterm/pterm"
 )
 
+// Initialize the cli arguments
+var args utils.Arguments = utils.Args()
+
 // Initialize our statistics
 var stats statistics.Statistics = statistics.NewStatistics()
+
+// Initialize the logger
+var logToFile = utils.Logger()
 
 /*
 	If you for some reason end up in a situation where you get
@@ -36,6 +40,10 @@ func request(url string) bool {
 		stats.SetFailure(1)
 
 		return false
+	}
+
+	if args.Logger() {
+		logToFile(url)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -113,22 +121,8 @@ func workers(concurrent int, interval int, url string) {
 }
 
 func main() {
-	// Custom cli flags
-	concurrent := flag.Int("c", 10, "How many concurrent users to simulate")
-	interval := flag.Int("t", 60, "How many seconds to run the test")
-
-	flag.Parse()
-
-	// The URL you want to load test
-	url := flag.Arg(0)
-	if url == "" {
-		fmt.Print("No URL provided. Example: $ rip https://www.google.com")
-
-		os.Exit(1)
-	}
-
 	// Run until the interval is done
-	workers(*concurrent, *interval, url)
+	workers(args.Concurrent(), args.Interval(), args.Url())
 
-	gui.PrintTable(stats, url)
+	gui.PrintTable(stats, args.Url())
 }
