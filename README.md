@@ -9,6 +9,7 @@ This is a HTTP load testing tool that run requests concurrently. Written as a Go
 -   Run requests concurrently
 -   Set a timer in second for how long it should run
 -   Outputs table of statistics for the end result
+-   Log the requests to $HOME/rip.log
 
 ## Coming
 
@@ -31,6 +32,8 @@ Usage of rip
     How many seconds to run the test (default: 60)
   -c float
     How many concurrent users to simulate (default: 10)
+  -l bool
+    Log the requests to $HOME/rip.log (default: false)
 
 ```
 
