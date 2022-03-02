@@ -10,18 +10,30 @@ This is a HTTP load testing tool that run requests concurrently. Written as a Go
 -   Set a timer in second for how long it should run
 -   Outputs table of statistics for the end result
 -   Log the requests to $HOME/rip.log
+-   Supports multiple URLs
 
 ## Coming
 
 -   JSON output of the result
--   Support multiple URLs
 
 ## Usage
 
 Install the binary from <https://github.com/bjarneo/rip/releases>, or go directly to the build the binary manually step.
 
 ```bash
-$ rip -c 100 -t 10 https://your.domain.com
+# Standard by using one url
+rip -c 100 -t 10 https://your.domain.com
+
+# Multiple urls
+touch urls.txt
+
+# Add the content, important that each url is on a newline
+http://localhost:5000
+http://localhost:5000/dis-is-nice
+http://localhost:5000/yas
+
+# RIP
+rip -t 10 -u urls.txt
 ```
 
 ### The default values
@@ -34,6 +46,8 @@ Usage of rip
     How many concurrent users to simulate (default: 10)
   -l bool
     Log the requests to $HOME/rip.log (default: false)
+  -u string
+    A file of URLs. Each URL should be on a new line. Will randomly choose an URL.
 
 ```
 
@@ -64,6 +78,10 @@ If you get this error message `socket: too many open files`, you might want to i
 ```bash
 ulimit -n 12000
 ```
+
+## Information
+
+This tool is to be used on your own risk. Not to be used maliciously.
 
 ## LICENSE
 

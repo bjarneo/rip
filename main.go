@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
 	"sync"
 	"time"
@@ -29,10 +30,12 @@ var logToFile = utils.Logger()
 	try to set ulimit to a higher number.
 	$ ulimit -n 12000
 */
-func request(url string) bool {
+func request(urls []string) bool {
 	start := utils.NowUnixMilli()
 
 	stats.SetTotal(1)
+
+	url := urls[rand.Intn(len(urls))]
 
 	resp, err := http.Get(url)
 
@@ -70,12 +73,12 @@ func request(url string) bool {
 	return true
 }
 
-func workers(concurrent int, interval int, url string) {
+func workers(concurrent int, interval int, urls []string) {
 	// Let us start the timer for how long the workers are running
 	start := utils.NowUnixMilli()
 	end := utils.FutureUnixMilli(interval)
 
-	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Load testing %s", url))
+	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Ongoing load testing.."))
 
 	var wg sync.WaitGroup
 
@@ -86,7 +89,7 @@ func workers(concurrent int, interval int, url string) {
 		// run the concurrent go routines
 		go func() {
 			for {
-				request(url)
+				request(urls)
 			}
 		}()
 	}
@@ -122,7 +125,7 @@ func workers(concurrent int, interval int, url string) {
 
 func main() {
 	// Run until the interval is done
-	workers(args.Concurrent(), args.Interval(), args.Url())
+	workers(args.Concurrent(), args.Interval(), args.Urls())
 
-	gui.PrintTable(stats, args.Url())
+	gui.PrintTable(stats)
 }

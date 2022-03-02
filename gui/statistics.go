@@ -7,14 +7,13 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func PrintTable(stats statistics.Statistics, url string) {
+func PrintTable(stats statistics.Statistics) {
 	fmt.Println()
 
 	pterm.DefaultTable.WithHasHeader().WithData(
 		pterm.TableData{
-			{"URL", "Total", "Successful", "Failed", "Longest", "Shortest", "Elapsed Time", "Avg Response Time", "Data transferred"},
+			{"Total", "Successful", "Failed", "Longest", "Shortest", "Elapsed Time", "Avg Response Time", "Data transferred"},
 			{
-				url,
 				fmt.Sprintf("%d", stats.Total()),
 				fmt.Sprintf("%d", stats.Successful()),
 				fmt.Sprintf("%d", stats.Failure()),
