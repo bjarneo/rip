@@ -79,9 +79,9 @@ If you get this error message `socket: too many open files`, you might want to i
 ulimit -n 12000
 ```
 
-## Information
+## Disclaimer
 
-This tool is to be used on your own risk. Not to be used maliciously.
+Use this tool at your own risk
 
 ## LICENSE
 
