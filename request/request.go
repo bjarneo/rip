@@ -1,7 +1,6 @@
 package request
 
 import (
-	"fmt"
 	"io"
 	"math/rand"
 	"net"
@@ -26,7 +25,7 @@ func udpRequest(url string, args utils.Arguments, stats statistics.Statistics) b
 		return false
 	}
 
-	fmt.Fprintf(conn, uniuri.NewLen(BYTES))
+	conn.Write([]byte(uniuri.NewLen(BYTES)))
 
 	conn.Close()
 
