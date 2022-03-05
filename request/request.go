@@ -25,7 +25,11 @@ func udpRequests(hosts []string, args utils.Arguments, stats statistics.Statisti
 		return false
 	}
 
-	conn.Write([]byte(uniuri.NewLen(bytes)))
+	floodString := uniuri.NewLen(bytes)
+
+	conn.Write([]byte(floodString))
+
+	stats.SetDataTransferred(len(floodString))
 
 	if args.Logger() {
 		logToFile(host)
