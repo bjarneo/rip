@@ -12,6 +12,7 @@ type Arguments struct {
 	logger     *bool
 	url        *string
 	urls       *string
+	udp        *bool
 }
 
 func Args() Arguments {
@@ -20,6 +21,7 @@ func Args() Arguments {
 		interval:   flag.Int("t", 60, "How many seconds to run the test"),
 		logger:     flag.Bool("l", false, "Log the requests to $HOME/rip.log"),
 		urls:       flag.String("u", "", "A file of URLs. Each URL should be on a new line. It will randomly choose a URL."),
+		udp:        flag.Bool("udp", false, "UDP flood attack"),
 	}
 
 	flag.Parse()
@@ -59,4 +61,12 @@ func (flags *Arguments) Urls() []string {
 	url[0] = *flags.url
 
 	return url
+}
+
+func (flags *Arguments) RequestType() string {
+	if *flags.udp {
+		return "udp"
+	}
+
+	return "http"
 }
