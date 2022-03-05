@@ -26,7 +26,7 @@ func Logger() func(string) {
 
 	return func(request string) {
 		// use ISO8601 formatting
-		logString := fmt.Sprintf(`[%s] - GET "%s"`, time.Now().UTC().Format("2006-01-02T15:04:05-0700"), request)
+		logString := fmt.Sprintf(`[%s] - "%s"`, time.Now().UTC().Format("2006-01-02T15:04:05-0700"), request)
 
 		_, err = fmt.Fprintln(f, logString)
 		if err != nil {

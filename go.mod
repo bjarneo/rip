@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/atomicgo/cursor v0.0.1 // indirect
+	github.com/dchest/uniuri v0.0.0-20200228104902-7aecb25e1fe5 // indirect
 	github.com/gookit/color v1.4.2 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/pterm/pterm v0.12.37 // indirect
