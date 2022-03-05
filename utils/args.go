@@ -10,9 +10,10 @@ type Arguments struct {
 	concurrent *int
 	interval   *int
 	logger     *bool
-	url        *string
-	urls       *string
+	host       *string
+	hosts      *string
 	udp        *bool
+	bytes      *int
 }
 
 func Args() Arguments {
@@ -20,21 +21,22 @@ func Args() Arguments {
 		concurrent: flag.Int("c", 10, "How many concurrent users to simulate"),
 		interval:   flag.Int("t", 60, "How many seconds to run the test"),
 		logger:     flag.Bool("l", false, "Log the requests to $HOME/rip.log"),
-		urls:       flag.String("u", "", "A file of URLs. Each URL should be on a new line. It will randomly choose a URL."),
-		udp:        flag.Bool("udp", false, "UDP flood attack"),
+		hosts:      flag.String("h", "", "A file of hosts. Each host should be on a new line. It will randomly choose a host."),
+		udp:        flag.Bool("u", false, "Run requests UDP flood attack and not http requests"),
+		bytes:      flag.Int("ub", 2048, "Set the x bytes for the UDP flood attack"),
 	}
 
 	flag.Parse()
 
-	// The URL you want to load test
-	url := flag.Arg(0)
-	if url == "" && *flags.urls == "" {
-		fmt.Print("No URL provided. Example: $ rip https://www.google.com, or $ rip -u urls.txt.")
+	// The host you want to load test
+	host := flag.Arg(0)
+	if host == "" && *flags.hosts == "" {
+		fmt.Print("No host provided. Example: $ rip https://www.google.com, or $ rip -u hosts.txt.")
 
 		os.Exit(1)
 	}
 
-	flags.url = &url
+	flags.host = &host
 
 	return flags
 }
@@ -51,16 +53,16 @@ func (flags *Arguments) Logger() bool {
 	return *flags.logger
 }
 
-func (flags *Arguments) Urls() []string {
-	if *flags.urls != "" {
-		return FileURL(*flags.urls)
+func (flags *Arguments) Hosts() []string {
+	if *flags.hosts != "" {
+		return HostsFromFile(*flags.hosts)
 	}
 
-	url := make([]string, 1)
+	host := make([]string, 1)
 
-	url[0] = *flags.url
+	host[0] = *flags.host
 
-	return url
+	return host
 }
 
 func (flags *Arguments) RequestType() string {
@@ -69,4 +71,8 @@ func (flags *Arguments) RequestType() string {
 	}
 
 	return "http"
+}
+
+func (flags *Arguments) Bytes() int {
+	return *flags.bytes
 }

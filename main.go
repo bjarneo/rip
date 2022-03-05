@@ -18,7 +18,7 @@ var args utils.Arguments = utils.Args()
 // Initialize our statistics
 var stats statistics.TotalStatistics = statistics.NewStatistics()
 
-func workers(concurrent int, interval int, urls []string) {
+func workers(concurrent int, interval int, hosts []string) {
 	// Let us start the timer for how long the workers are running
 	start := utils.NowUnixMilli()
 	end := utils.FutureUnixMilli(interval)
@@ -31,12 +31,7 @@ func workers(concurrent int, interval int, urls []string) {
 	for i := 0; i < concurrent; i++ {
 		wg.Add(1)
 
-		// run the concurrent go routines
-		go func() {
-			for {
-				request.Request(urls, args, &stats)
-			}
-		}()
+		request.Request(hosts, args, &stats)
 	}
 
 	// This loop will run until the end is reached
@@ -70,7 +65,7 @@ func workers(concurrent int, interval int, urls []string) {
 
 func main() {
 	// Run until the interval is done
-	workers(args.Concurrent(), args.Interval(), args.Urls())
+	workers(args.Concurrent(), args.Interval(), args.Hosts())
 
 	gui.PrintTable(&stats)
 }

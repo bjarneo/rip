@@ -2,7 +2,6 @@ package request
 
 import (
 	"io"
-	"math/rand"
 	"net"
 	"net/http"
 
@@ -14,26 +13,31 @@ import (
 // Initialize the logger
 var logToFile = utils.Logger()
 
-func udpRequest(url string, args utils.Arguments, stats statistics.Statistics) bool {
-	const BYTES = 2048
+func udpRequests(hosts []string, args utils.Arguments, stats statistics.Statistics) bool {
+	bytes := args.Bytes()
 
-	conn, err := net.Dial("udp", url)
+	host := utils.RandomSlice(hosts)
+
+	// Never reuse the connection as we want to do a requests towards a random host
+	conn, err := net.Dial("udp", host)
 
 	if err != nil {
-		stats.SetFailure(1)
-
 		return false
 	}
 
-	conn.Write([]byte(uniuri.NewLen(BYTES)))
+	conn.Write([]byte(uniuri.NewLen(bytes)))
 
-	//conn.Close()
+	if args.Logger() {
+		logToFile(host)
+	}
 
 	return true
 }
 
-func httpRequest(url string, args utils.Arguments, stats statistics.Statistics) bool {
-	resp, err := http.Get(url)
+func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statistics) bool {
+	host := utils.RandomSlice(hosts)
+
+	resp, err := http.Get(host)
 
 	if err != nil {
 		stats.SetFailure(1)
@@ -42,7 +46,7 @@ func httpRequest(url string, args utils.Arguments, stats statistics.Statistics) 
 	}
 
 	if args.Logger() {
-		logToFile(url)
+		logToFile(host)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -60,33 +64,27 @@ func httpRequest(url string, args utils.Arguments, stats statistics.Statistics) 
 	return true
 }
 
-func Request(urls []string, args utils.Arguments, stats statistics.Statistics) bool {
-	start := utils.NowUnixMilli()
+func Request(hosts []string, args utils.Arguments, stats statistics.Statistics) {
+	go func() {
+		for {
+			start := utils.NowUnixMilli()
 
-	stats.SetTotal(1)
+			stats.SetTotal(1)
 
-	url := urls[rand.Intn(len(urls))]
+			if args.RequestType() == "http" {
+				httpRequests(hosts, args, stats)
+			} else if args.RequestType() == "udp" {
+				udpRequests(hosts, args, stats)
+			}
 
-	var success bool
+			stats.SetSuccessful(1)
 
-	if args.RequestType() == "http" {
-		success = httpRequest(url, args, stats)
-	} else if args.RequestType() == "udp" {
-		success = udpRequest(url, args, stats)
-	}
+			stop := utils.NowUnixMilli()
 
-	if !success {
-		return false
-	}
-
-	stats.SetSuccessful(1)
-
-	stop := utils.NowUnixMilli()
-
-	// Update all of our time statistics
-	stats.SetResponseTime(stop - start)
-	stats.SetShortest(stop - start)
-	stats.SetLongest(stop - start)
-
-	return true
+			// Update all of our time statistics
+			stats.SetResponseTime(stop - start)
+			stats.SetShortest(stop - start)
+			stats.SetLongest(stop - start)
+		}
+	}()
 }

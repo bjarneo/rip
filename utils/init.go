@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"math/rand"
 	"os"
 	"strings"
 	"time"
@@ -29,14 +30,18 @@ func deleteEmptyFromSlice(s []string) []string {
 	return r
 }
 
-func FileURL(urls string) []string {
-	data, err := os.ReadFile(urls)
+func HostsFromFile(hosts string) []string {
+	data, err := os.ReadFile(hosts)
 
 	if err != nil {
 		panic(err)
 	}
 
-	urlsToslice := deleteEmptyFromSlice(strings.Split(strings.ReplaceAll(string(data), "\r\n", "\n"), "\n"))
+	hostsToslice := deleteEmptyFromSlice(strings.Split(strings.ReplaceAll(string(data), "\r\n", "\n"), "\n"))
 
-	return urlsToslice
+	return hostsToslice
+}
+
+func RandomSlice(hosts []string) string {
+	return hosts[rand.Intn(len(hosts))]
 }
