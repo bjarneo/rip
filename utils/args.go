@@ -18,12 +18,12 @@ type Arguments struct {
 
 func Args() Arguments {
 	flags := Arguments{
-		concurrent: flag.Int("c", 10, "How many concurrent users to simulate"),
-		interval:   flag.Int("t", 60, "How many seconds to run the test"),
-		logger:     flag.Bool("l", false, "Log the requests to $HOME/rip.log"),
-		hosts:      flag.String("h", "", "A file of hosts. Each host should be on a new line. It will randomly choose a host."),
-		udp:        flag.Bool("u", false, "Run requests UDP flood attack and not http requests"),
-		bytes:      flag.Int("ub", 2048, "Set the x bytes for the UDP flood attack"),
+		concurrent: flag.Int("concurrent", 10, "How many concurrent users to simulate"),
+		interval:   flag.Int("interval", 60, "How many seconds to run the test"),
+		logger:     flag.Bool("logger", false, "Log the requests to $HOME/rip.log"),
+		hosts:      flag.String("hosts", "", "A file of hosts. Each host should be on a new line. It will randomly choose a host."),
+		udp:        flag.Bool("udp", false, "Run requests UDP flood attack and not http requests"),
+		bytes:      flag.Int("udp-bytes", 2048, "Set the x bytes for the UDP flood attack"),
 	}
 
 	flag.Parse()

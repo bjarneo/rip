@@ -1,17 +1,18 @@
 # RIP
 
-This is a HTTP load testing tool that run requests concurrently. Written as a Golang learning project.
+This is a HTTP load testing and UDP flood attack tool that run requests concurrently.
 
 ![RIP](./rip.png)
 
 ## Features
 
+-   HTTP load testing
+-   UDP flood attack
 -   Run requests concurrently
 -   Set a timer in second for how long it should run
 -   Outputs table of statistics for the end result
 -   Log the requests to $HOME/rip.log
 -   Supports multiple hosts
--   UDP flood attack
 
 ## Coming
 
@@ -23,7 +24,7 @@ Install the binary from <https://github.com/bjarneo/rip/releases>, or go directl
 
 ```bash
 # Standard by using one host
-rip -c 100 -t 10 https://your.domain.com
+rip -concurrent 100 -interval 10 https://your.domain.com
 
 # Multiple hosts
 touch hosts.txt
@@ -34,27 +35,27 @@ http://localhost:5000/dis-is-nice
 http://localhost:5000/yas
 
 # RIP
-rip -t 10 -h hosts.txt
+rip -interval 10 -hosts hosts.txt
 
 # Using UDP flood attack
-rip -t 10 -c 10 -u -ub 4096 0.0.0.0:30000
+rip -interval 10 -concurrent 10 -udp -udp-bytes 4096 0.0.0.0:30000
 ```
 
 ### The default values
 
 ```
 Usage of rip
-  -t int
-    How many seconds to run the test (default: 60)
-  -c float
+  -interval     int
+    How many seconds to run the load tests (default: 60)
+  -concurrent   float
     How many concurrent users to simulate (default: 10)
-  -l bool
+  -logger       bool
     Log the requests to $HOME/rip.log (default: false)
-  -h string
+  -hosts        string
     A file of hosts. Each host should be on a new line. Will randomly choose an host.
-  -u bool
+  -udp          bool
     Run requests UDP flood attack and not http requests (default: false)
-  -ub int
+  -udp-bytes    int
     Set the x bytes for the UDP flood attack (default: 2048)
 
 ```
