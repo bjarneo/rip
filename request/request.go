@@ -35,6 +35,9 @@ func udpRequests(hosts []string, args utils.Arguments, stats statistics.Statisti
 		logToFile(host)
 	}
 
+	// close the connection as we do not reuse it
+	conn.Close()
+
 	return true
 }
 
