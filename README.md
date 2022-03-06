@@ -34,7 +34,7 @@ http://localhost:5000/dis-is-nice
 http://localhost:5000/yas
 
 # RIP
-rip -t 10 -u hosts.txt
+rip -t 10 -h hosts.txt
 
 # Using UDP flood attack
 rip -t 10 -c 10 -u -ub 4096 0.0.0.0:30000
