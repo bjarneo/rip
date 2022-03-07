@@ -90,7 +90,7 @@ ulimit -n 12000
 
 ## Disclaimer
 
-Use this tool at your own risk
+Use this tool at your own risk. The owner of this repository is not responsible for its usage.
 
 ## LICENSE
 
