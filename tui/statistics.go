@@ -35,6 +35,7 @@ func PrintStats(stats statistics.Statistics) string {
 		template("Total", fmt.Sprintf("%d", stats.Total())),
 		template("Successful", fmt.Sprintf("%d", stats.Successful())),
 		template("Failed", fmt.Sprintf("%d", stats.Failure())),
+		template("Unfinished", fmt.Sprintf("%d", stats.Total()-stats.Successful()-stats.Failure())),
 		template("Longest", fmt.Sprintf("%dms", stats.Longest())),
 		template("Shortest", fmt.Sprintf("%dms", stats.Shortest())),
 		template("Elapsed Time", fmt.Sprintf("%.2fs", float64(stats.ElapsedTime()/1000))),
