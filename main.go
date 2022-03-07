@@ -1,13 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"sync"
 	"time"
 
-	"github.com/bjarneo/rip/gui"
 	"github.com/bjarneo/rip/request"
 	"github.com/bjarneo/rip/statistics"
+	"github.com/bjarneo/rip/tui"
 	"github.com/bjarneo/rip/utils"
 	"github.com/pterm/pterm"
 )
@@ -23,7 +22,7 @@ func workers(concurrent int, interval int, hosts []string) {
 	start := utils.NowUnixMilli()
 	end := utils.FutureUnixMilli(interval)
 
-	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Ongoing load testing.."))
+	area, _ := pterm.DefaultArea.Start()
 
 	var wg sync.WaitGroup
 
@@ -40,6 +39,8 @@ func workers(concurrent int, interval int, hosts []string) {
 		// Run the for loop once a second
 		time.Sleep(time.Second * time.Duration(1))
 
+		area.Update(tui.Logo() + tui.PrintStats(&stats))
+
 		if utils.NowUnixMilli() < end {
 			continue
 		}
@@ -55,17 +56,19 @@ func workers(concurrent int, interval int, hosts []string) {
 	// Block until wait groups has been closed
 	wg.Wait()
 
-	spinner.Success()
-
 	// End the timer for how long the workers are running
 	stop := utils.NowUnixMilli()
 
 	stats.SetElapsedTime(stop - start)
+
+	// Final update
+	area.Update(tui.Logo() + tui.PrintStats(&stats))
+
+	// stop the area update
+	area.Stop()
 }
 
 func main() {
 	// Run until the interval is done
 	workers(args.Concurrent(), args.Interval(), args.Hosts())
-
-	gui.PrintTable(&stats)
 }
