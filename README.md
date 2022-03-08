@@ -2,7 +2,7 @@
 
 This is a HTTP load testing and UDP flood attack tool that run requests concurrently.
 
-![RIP](./rip.png)
+![RIP](./rip.gif)
 
 ## Features
 
