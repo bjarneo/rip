@@ -2,21 +2,25 @@
 
 This is a HTTP load testing and UDP flood attack tool that run requests concurrently.
 
+Note: I am using this project as a Go learning project. Refactors will most likely happen often.
+
+Looking for new features? Create an issue.
+
 ![RIP](./rip.gif)
 
 ## Features
 
--   HTTP load testing
--   UDP flood attack
--   Run requests concurrently
--   Set a timer in second for how long it should run
--   Outputs table of statistics for the end result
--   Log the requests to $HOME/rip.log
--   Supports multiple hosts
+- HTTP load testing
+- UDP flood attack
+- Run requests concurrently
+- Set a timer in second for how long it should run
+- Outputs table of statistics for the end result
+- Log the requests to $HOME/rip.log
+- Supports multiple hosts
 
 ## Coming
 
--   JSON output of the result
+- JSON output of the result
 
 ## Usage
 
@@ -43,11 +47,11 @@ rip -interval 10 -concurrent 10 -udp -udp-bytes 4096 0.0.0.0:30000
 
 ### The default values
 
-```
+```bash
 Usage of rip
   -interval     int
     How many seconds to run the load tests (default: 60)
-  -concurrent   float
+  -concurrent   int
     How many concurrent users to simulate (default: 10)
   -logger       bool
     Log the requests to $HOME/rip.log (default: false)
