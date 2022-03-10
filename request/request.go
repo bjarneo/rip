@@ -44,7 +44,18 @@ func udpRequests(hosts []string, args utils.Arguments, stats statistics.Statisti
 func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statistics) bool {
 	host := utils.RandomSlice(hosts)
 
-	resp, err := http.Get(host)
+	req, err := http.NewRequest("GET", host, nil)
+
+	if err != nil {
+		stats.SetFailure(1)
+
+		return false
+	}
+
+	req.Header.Add("User-Agent", "Load Testing [RIP]")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 
 	if err != nil {
 		stats.SetFailure(1)
