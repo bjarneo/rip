@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -71,4 +72,8 @@ func workers(concurrent int, interval int, hosts []string) {
 func main() {
 	// Run until the interval is done
 	workers(args.Concurrent(), args.Interval(), args.Hosts())
+
+	if args.Output() == "json" {
+		fmt.Println(stats.ToJSON())
+	}
 }

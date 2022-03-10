@@ -14,6 +14,7 @@ type Arguments struct {
 	hosts      *string
 	udp        *bool
 	bytes      *int
+	output     *string
 }
 
 func Args() Arguments {
@@ -24,6 +25,7 @@ func Args() Arguments {
 		hosts:      flag.String("hosts", "", "A file of hosts. Each host should be on a new line. It will randomly choose a host."),
 		udp:        flag.Bool("udp", false, "Run requests UDP flood attack and not http requests"),
 		bytes:      flag.Int("udp-bytes", 2048, "Set the x bytes for the UDP flood attack"),
+		output:     flag.String("output", "", "Get statistics as output. Current support: json"),
 	}
 
 	flag.Parse()
@@ -75,4 +77,12 @@ func (flags *Arguments) RequestType() string {
 
 func (flags *Arguments) Bytes() int {
 	return *flags.bytes
+}
+
+func (flags *Arguments) Output() string {
+	if *flags.output == "json" {
+		return "json"
+	}
+
+	return ""
 }
