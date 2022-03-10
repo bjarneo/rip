@@ -79,6 +79,8 @@ go run main.go
 
 ## Build the binary manually
 
+To use the bleeding edge codebase, this is the way.
+
 ```bash
 # Build binary
 go build
