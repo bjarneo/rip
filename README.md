@@ -20,6 +20,9 @@ Looking for new features? Create an issue.
 
 ## Coming
 
+- POST/PUT/PATCH http requests
+- HTTP/UDP payload attachment
+- Custom HTTP headers
 - JSON output of the result
 
 ## Usage
