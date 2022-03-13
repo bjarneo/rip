@@ -102,7 +102,11 @@ func (flags *Arguments) IsJSONPayload() bool {
 }
 
 func (flags *Arguments) JSONPayload() []byte {
-	payload := FileContent(*flags.json)
+	if *flags.json != "" {
+		payload := FileContent(*flags.json)
 
-	return []byte(payload)
+		return []byte(payload)
+	}
+
+	return []byte("")
 }
