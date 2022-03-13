@@ -40,19 +40,17 @@ func FileContent(filename string) string {
 	return string(data)
 }
 
-func HostsFromFile(hosts string) []string {
-	hostsToslice := deleteEmptyFromSlice(
+func LinesFromFile(file string) []string {
+	return deleteEmptyFromSlice(
 		strings.Split(
 			strings.ReplaceAll(
-				FileContent(hosts),
+				FileContent(file),
 				"\r\n",
 				"\n",
 			),
 			"\n",
 		),
 	)
-
-	return hostsToslice
 }
 
 func RandomSlice(hosts []string) string {

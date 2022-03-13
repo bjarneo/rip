@@ -18,6 +18,7 @@ type Arguments struct {
 	put        *bool
 	patch      *bool
 	json       *string
+	headers    *string
 }
 
 func Args() Arguments {
@@ -32,6 +33,7 @@ func Args() Arguments {
 		put:        flag.Bool("put", false, "PUT HTTP request"),
 		patch:      flag.Bool("patch", false, "PATCH HTTP request"),
 		json:       flag.String("json", "", "Path to the JSON payload file to be used for the HTTP requests"),
+		headers:    flag.String("headers", "", "Path to the headers file"),
 	}
 
 	flag.Parse()
@@ -63,7 +65,7 @@ func (flags *Arguments) Logger() bool {
 
 func (flags *Arguments) Hosts() []string {
 	if *flags.hosts != "" {
-		return HostsFromFile(*flags.hosts)
+		return LinesFromFile(*flags.hosts)
 	}
 
 	host := make([]string, 1)
@@ -109,4 +111,12 @@ func (flags *Arguments) JSONPayload() []byte {
 	}
 
 	return []byte("")
+}
+
+func (flags *Arguments) Headers() []string {
+	if *flags.headers != "" {
+		return LinesFromFile(*flags.headers)
+	}
+
+	return make([]string, 0)
 }

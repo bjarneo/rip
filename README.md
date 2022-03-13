@@ -32,10 +32,10 @@ Looking for new features? Create an issue.
 Install the binary from <https://github.com/bjarneo/rip/releases>, or go directly to the build the binary manually step.
 
 ```bash
-# Standard by using one host
+#### Standard by using one host
 rip -concurrent 100 -interval 10 https://your.domain.com
 
-# Multiple hosts
+#### Multiple hosts
 touch hosts.txt
 
 # Add the content, important that each host is on a newline
@@ -46,11 +46,21 @@ http://localhost:5000/yas
 # RIP
 rip -interval 10 -hosts hosts.txt
 
-# Using UDP flood attack
+#### Using UDP flood attack
 rip -interval 10 -concurrent 10 -udp -udp-bytes 4096 0.0.0.0:30000
 
-# Using a JSON payload for POST requests
+#### Using a JSON payload for POST requests
 rip -interval 10 -concurrent 10 -post -json payload.json http://localhost:5000/login
+
+#### Example using custom headers
+touch headers.txt
+
+# Add the content
+X-Real-Ip: 192.168.0.1
+Authorization: Basic aGV5OnlvdQo=
+
+# RIP
+rip -interval 10 -concurrent 10 -headers headers.txt http://localhost:5000
 ```
 
 ### The default values
@@ -61,6 +71,8 @@ Usage of RIP
     	How many concurrent users to simulate (default 10)
   -hosts string
     	A file of hosts. Each host should be on a new line. It will randomly choose a host. (default "")
+ -headers string
+    	Path to the headers file (default "")
   -interval int
     	How many seconds to run the test (default 60)
   -json string

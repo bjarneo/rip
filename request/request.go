@@ -53,7 +53,11 @@ func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statist
 		return false
 	}
 
-	req.Header.Add("User-Agent", "Load Testing [RIP]")
+	headers := utils.ParseHeaders(args.Headers())
+
+	for key, value := range headers {
+		req.Header.Add(key, value)
+	}
 
 	if args.IsJSONPayload() {
 		req.Header.Add("Content-Type", "application/json; charset=UTF-8")
