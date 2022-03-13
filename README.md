@@ -19,13 +19,14 @@ Looking for new features? Create an issue.
 -   Supports multiple hosts
 -   POST/PUT/PATCH HTTP requests
 -   HTTP JSON payload
+-   Custom HTTP headers
 
 ## Coming
 
 -   UDP payload attachment
 -   Form data payload
--   Custom HTTP headers
 -   JSON output of the result
+-   Proxy
 
 ## Usage
 
