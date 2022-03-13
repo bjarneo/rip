@@ -1,6 +1,7 @@
 package request
 
 import (
+	"bytes"
 	"io"
 	"net"
 	"net/http"
@@ -44,7 +45,7 @@ func udpRequests(hosts []string, args utils.Arguments, stats statistics.Statisti
 func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statistics) bool {
 	host := utils.RandomSlice(hosts)
 
-	req, err := http.NewRequest("GET", host, nil)
+	req, err := http.NewRequest(args.HTTPMethod(), host, bytes.NewBuffer(args.JSONPayload()))
 
 	if err != nil {
 		stats.SetFailure(1)
@@ -53,6 +54,10 @@ func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statist
 	}
 
 	req.Header.Add("User-Agent", "Load Testing [RIP]")
+
+	if args.IsJSONPayload() {
+		req.Header.Add("Content-Type", "application/json; charset=UTF-8")
+	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

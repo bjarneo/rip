@@ -14,6 +14,10 @@ type Arguments struct {
 	hosts      *string
 	udp        *bool
 	bytes      *int
+	post       *bool
+	put        *bool
+	patch      *bool
+	json       *string
 }
 
 func Args() Arguments {
@@ -24,6 +28,10 @@ func Args() Arguments {
 		hosts:      flag.String("hosts", "", "A file of hosts. Each host should be on a new line. It will randomly choose a host."),
 		udp:        flag.Bool("udp", false, "Run requests UDP flood attack and not http requests"),
 		bytes:      flag.Int("udp-bytes", 2048, "Set the x bytes for the UDP flood attack"),
+		post:       flag.Bool("post", false, "POST HTTP request"),
+		put:        flag.Bool("put", false, "PATCH HTTP request"),
+		patch:      flag.Bool("patch", false, "PATCH HTTP request"),
+		json:       flag.String("json", "", "Path to the JSON payload file to be used for the HTTP requests"),
 	}
 
 	flag.Parse()
@@ -75,4 +83,26 @@ func (flags *Arguments) RequestType() string {
 
 func (flags *Arguments) Bytes() int {
 	return *flags.bytes
+}
+
+func (flags *Arguments) HTTPMethod() string {
+	if *flags.post {
+		return "POST"
+	} else if *flags.put {
+		return "PUT"
+	} else if *flags.patch {
+		return "PATCH"
+	} else {
+		return "GET"
+	}
+}
+
+func (flags *Arguments) IsJSONPayload() bool {
+	return *flags.json != ""
+}
+
+func (flags *Arguments) JSONPayload() []byte {
+	payload := FileContent(*flags.json)
+
+	return []byte(payload)
 }
