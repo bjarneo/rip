@@ -80,7 +80,7 @@ func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statist
 		return false
 	}
 
-	stats.SetDataTransferred(len(body))
+	stats.SetDataTransferred(len(body) + len(args.JSONPayload()))
 
 	defer resp.Body.Close()
 
