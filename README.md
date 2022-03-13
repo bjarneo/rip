@@ -72,7 +72,7 @@ Usage of RIP
   -post bool
     	POST HTTP request (default false)
   -put bool
-    	PATCH HTTP request (default false)
+    	PUT HTTP request (default false)
   -udp bool
     	Run requests UDP flood attack and not http requests (default false)
   -udp-bytes int

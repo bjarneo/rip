@@ -29,7 +29,7 @@ func Args() Arguments {
 		udp:        flag.Bool("udp", false, "Run requests UDP flood attack and not http requests"),
 		bytes:      flag.Int("udp-bytes", 2048, "Set the x bytes for the UDP flood attack"),
 		post:       flag.Bool("post", false, "POST HTTP request"),
-		put:        flag.Bool("put", false, "PATCH HTTP request"),
+		put:        flag.Bool("put", false, "PUT HTTP request"),
 		patch:      flag.Bool("patch", false, "PATCH HTTP request"),
 		json:       flag.String("json", "", "Path to the JSON payload file to be used for the HTTP requests"),
 	}
