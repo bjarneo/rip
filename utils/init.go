@@ -30,14 +30,27 @@ func deleteEmptyFromSlice(s []string) []string {
 	return r
 }
 
-func HostsFromFile(hosts string) []string {
-	data, err := os.ReadFile(hosts)
+func FileContent(filename string) string {
+	data, err := os.ReadFile(filename)
 
 	if err != nil {
 		panic(err)
 	}
 
-	hostsToslice := deleteEmptyFromSlice(strings.Split(strings.ReplaceAll(string(data), "\r\n", "\n"), "\n"))
+	return string(data)
+}
+
+func HostsFromFile(hosts string) []string {
+	hostsToslice := deleteEmptyFromSlice(
+		strings.Split(
+			strings.ReplaceAll(
+				FileContent(hosts),
+				"\r\n",
+				"\n",
+			),
+			"\n",
+		),
+	)
 
 	return hostsToslice
 }

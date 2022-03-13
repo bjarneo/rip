@@ -10,20 +10,22 @@ Looking for new features? Create an issue.
 
 ## Features
 
-- HTTP load testing
-- UDP flood attack
-- Run requests concurrently
-- Set a timer in second for how long it should run
-- Outputs table of statistics for the end result
-- Log the requests to $HOME/rip.log
-- Supports multiple hosts
+-   HTTP load testing
+-   UDP flood attack
+-   Run requests concurrently
+-   Set a timer in second for how long it should run
+-   Outputs table of statistics for the end result
+-   Log the requests to $HOME/rip.log
+-   Supports multiple hosts
+-   POST/PUT/PATCH HTTP requests
+-   HTTP JSON payload
 
 ## Coming
 
-- POST/PUT/PATCH http requests
-- HTTP/UDP payload attachment
-- Custom HTTP headers
-- JSON output of the result
+-   UDP payload attachment
+-   Form data payload
+-   Custom HTTP headers
+-   JSON output of the result
 
 ## Usage
 
@@ -46,24 +48,36 @@ rip -interval 10 -hosts hosts.txt
 
 # Using UDP flood attack
 rip -interval 10 -concurrent 10 -udp -udp-bytes 4096 0.0.0.0:30000
+
+# Using a JSON payload for POST requests
+rip -interval 10 -concurrent 10 -post -json payload.json http://localhost:5000/login
 ```
 
 ### The default values
 
 ```bash
-Usage of rip
-  -interval     int
-    How many seconds to run the load tests (default: 60)
-  -concurrent   int
-    How many concurrent users to simulate (default: 10)
-  -logger       bool
-    Log the requests to $HOME/rip.log (default: false)
-  -hosts        string
-    A file of hosts. Each host should be on a new line. Will randomly choose an host.
-  -udp          bool
-    Run requests UDP flood attack and not http requests (default: false)
-  -udp-bytes    int
-    Set the x bytes for the UDP flood attack (default: 2048)
+Usage of RIP
+  -concurrent int
+    	How many concurrent users to simulate (default 10)
+  -hosts string
+    	A file of hosts. Each host should be on a new line. It will randomly choose a host. (default "")
+  -interval int
+    	How many seconds to run the test (default 60)
+  -json string
+    	Path to the JSON payload file to be used for the HTTP requests (default "")
+  -logger bool
+    	Log the requests to $HOME/rip.log (default false)
+  -patch bool
+    	PATCH HTTP request (default false)
+  -post bool
+    	POST HTTP request (default false)
+  -put bool
+    	PATCH HTTP request (default false)
+  -udp bool
+    	Run requests UDP flood attack and not http requests (default false)
+  -udp-bytes int
+    	Set the x bytes for the UDP flood attack (default 2048)
+
 
 ```
 
