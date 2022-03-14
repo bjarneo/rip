@@ -5,6 +5,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/url"
 
 	"github.com/bjarneo/rip/statistics"
 	"github.com/bjarneo/rip/utils"
@@ -64,6 +65,17 @@ func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statist
 	}
 
 	client := &http.Client{}
+
+	if args.Proxy() != "" {
+		proxyUrl, err := url.Parse(args.Proxy())
+
+		if err != nil {
+			panic(err)
+		}
+
+		client.Transport = &http.Transport{Proxy: http.ProxyURL(proxyUrl)}
+	}
+
 	resp, err := client.Do(req)
 
 	if err != nil {

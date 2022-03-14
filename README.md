@@ -20,13 +20,13 @@ Looking for new features? Create an issue.
 -   POST/PUT/PATCH HTTP requests
 -   HTTP JSON payload
 -   Custom HTTP headers
+-   Proxy HTTP requests
 
 ## Coming
 
 -   UDP payload attachment
 -   Form data payload
 -   JSON output of the result
--   Proxy
 
 ## Usage
 
@@ -86,6 +86,8 @@ Usage of RIP
     	POST HTTP request (default false)
   -put bool
     	PUT HTTP request (default false)
+  -proxy string
+    	The proxy URL to route the traffic (default "")
   -udp bool
     	Run requests UDP flood attack and not http requests (default false)
   -udp-bytes int

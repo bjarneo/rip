@@ -19,6 +19,7 @@ type Arguments struct {
 	patch      *bool
 	json       *string
 	headers    *string
+	proxy      *string
 }
 
 func Args() Arguments {
@@ -34,6 +35,7 @@ func Args() Arguments {
 		patch:      flag.Bool("patch", false, "PATCH HTTP request"),
 		json:       flag.String("json", "", "Path to the JSON payload file to be used for the HTTP requests"),
 		headers:    flag.String("headers", "", "Path to the headers file"),
+		proxy:      flag.String("proxy", "", "The proxy URL to route the traffic"),
 	}
 
 	flag.Parse()
@@ -119,4 +121,8 @@ func (flags *Arguments) Headers() []string {
 	}
 
 	return make([]string, 0)
+}
+
+func (flags *Arguments) Proxy() string {
+	return *flags.proxy
 }
