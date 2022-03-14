@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+type Headers []string
 type Arguments struct {
 	concurrent *int
 	interval   *int
@@ -19,9 +20,28 @@ type Arguments struct {
 	patch      *bool
 	json       *string
 	headers    *string
+	setHeaders []string
 }
 
+// fix this one later
+func (headers *Headers) String() string {
+	return ""
+}
+
+func (headers *Headers) Set(value string) error {
+	*headers = append(*headers, value)
+	return nil
+}
+
+func (headers *Headers) AllHeaders() []string {
+	return *headers
+}
+
+var setHeaderFlags Headers
+
 func Args() Arguments {
+	flag.Var(&setHeaderFlags, "set-header", "Set header directly from the CLI")
+
 	flags := Arguments{
 		concurrent: flag.Int("concurrent", 10, "How many concurrent users to simulate"),
 		interval:   flag.Int("interval", 60, "How many seconds to run the test"),
@@ -34,6 +54,7 @@ func Args() Arguments {
 		patch:      flag.Bool("patch", false, "PATCH HTTP request"),
 		json:       flag.String("json", "", "Path to the JSON payload file to be used for the HTTP requests"),
 		headers:    flag.String("headers", "", "Path to the headers file"),
+		setHeaders: setHeaderFlags.AllHeaders(),
 	}
 
 	flag.Parse()
@@ -119,4 +140,8 @@ func (flags *Arguments) Headers() []string {
 	}
 
 	return make([]string, 0)
+}
+
+func (flags *Arguments) SetHeaders() []string {
+	return ParseHeaders(*flags.setHeaders)
 }
