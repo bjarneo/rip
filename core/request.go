@@ -11,7 +11,7 @@ import (
 )
 
 // Initialize the logger
-var logToFile = Logger()
+var logToFile func(string) = NewLogger()
 
 func udpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	bytes := args.Bytes()

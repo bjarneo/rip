@@ -18,7 +18,7 @@ func homeFolder() string {
 }
 
 // Logger writes each request to $HOME/rip.log.
-func Logger() func(string) {
+func NewLogger() func(string) {
 	f, err := os.Create(fmt.Sprintf("%s/rip.log", homeFolder()))
 	if err != nil {
 		panic(err)
