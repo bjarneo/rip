@@ -1,4 +1,4 @@
-package request
+package core
 
 import (
 	"bytes"
@@ -7,18 +7,16 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/bjarneo/rip/statistics"
-	"github.com/bjarneo/rip/utils"
 	"github.com/dchest/uniuri"
 )
 
 // Initialize the logger
-var logToFile = utils.Logger()
+var logToFile = Logger()
 
-func udpRequests(hosts []string, args utils.Arguments, stats statistics.Statistics) bool {
+func udpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	bytes := args.Bytes()
 
-	host := utils.RandomSlice(hosts)
+	host := RandomSlice(hosts)
 
 	// Never reuse the connection as we want to do a requests towards a random host
 	conn, err := net.Dial("udp", host)
@@ -43,8 +41,8 @@ func udpRequests(hosts []string, args utils.Arguments, stats statistics.Statisti
 	return true
 }
 
-func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statistics) bool {
-	host := utils.RandomSlice(hosts)
+func httpRequests(hosts []string, args Arguments, stats Statistics) bool {
+	host := RandomSlice(hosts)
 
 	req, err := http.NewRequest(args.HTTPMethod(), host, bytes.NewBuffer(args.JSONPayload()))
 
@@ -54,7 +52,7 @@ func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statist
 		return false
 	}
 
-	headers := utils.ParseHeaders(args.Headers())
+	headers := ParseHeaders(args.Headers())
 
 	for key, value := range headers {
 		req.Header.Add(key, value)
@@ -103,10 +101,10 @@ func httpRequests(hosts []string, args utils.Arguments, stats statistics.Statist
 	return true
 }
 
-func Request(hosts []string, args utils.Arguments, stats statistics.Statistics) {
+func Request(hosts []string, args Arguments, stats Statistics) {
 	go func() {
 		for {
-			start := utils.NowUnixMilli()
+			start := NowUnixMilli()
 
 			stats.SetTotal(1)
 
@@ -118,7 +116,7 @@ func Request(hosts []string, args utils.Arguments, stats statistics.Statistics) 
 
 			stats.SetSuccessful(1)
 
-			stop := utils.NowUnixMilli()
+			stop := NowUnixMilli()
 
 			// Update all of our time statistics
 			stats.SetResponseTime(stop - start)

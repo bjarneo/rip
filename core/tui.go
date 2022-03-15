@@ -1,10 +1,9 @@
-package tui
+package core
 
 import (
 	"fmt"
 	"strings"
 
-	"github.com/bjarneo/rip/statistics"
 	"github.com/pterm/pterm"
 )
 
@@ -30,7 +29,7 @@ func Logo() string {
 	return pterm.DefaultCenter.Sprint(logo)
 }
 
-func PrintStats(stats statistics.Statistics) string {
+func PrintStats(stats Statistics) string {
 	out := []string{
 		template("Total", fmt.Sprintf("%d", stats.Total())),
 		template("Successful", fmt.Sprintf("%d", stats.Successful())),

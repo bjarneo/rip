@@ -1,4 +1,4 @@
-package statistics
+package core
 
 import "sync"
 
