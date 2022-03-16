@@ -54,7 +54,7 @@ func httpRequests(hosts []string, args Arguments, stats Statistics) bool {
 
 	headers := ParseHeaders(args.Headers())
 
-	for key, value := range headers {
+	for key, value := range headers.Headers() {
 		req.Header.Add(key, value)
 	}
 

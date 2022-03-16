@@ -1,17 +1,40 @@
 package core
 
-import "strings"
+import (
+	"regexp"
+)
 
-func ParseHeaders(headersFileContent []string) map[string]string {
-	headers := make(map[string]string, 0)
+// This will match <first-group>:<second-group> of a header
+const (
+	PATTERN = "([a-zA-Z0-9-]+)[^*](.*)"
+)
 
-	headers["User-Agent"] = "Rest In Peace"
+type headers struct {
+	headers map[string]string
+}
 
-	for _, line := range headersFileContent {
-		header := strings.Split(line, ":")
+func ParseHeaders(headersFileContent []string) headers {
+	pattern := regexp.MustCompile(PATTERN)
 
-		headers[header[0]] = strings.TrimSpace(header[1])
+	h := headers{
+		headers: make(map[string]string, 0),
 	}
 
-	return headers
+	h.add("User-Agent", "Rest In Peace")
+
+	for _, line := range headersFileContent {
+		header := pattern.FindStringSubmatch(line)
+
+		h.add(header[1], header[2])
+	}
+
+	return h
+}
+
+func (h *headers) add(key string, value string) {
+	h.headers[key] = value
+}
+
+func (h *headers) Headers() map[string]string {
+	return h.headers
 }
