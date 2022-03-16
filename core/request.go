@@ -11,7 +11,7 @@ import (
 )
 
 // Initialize the logger
-var logToFile func(string) = NewLogger()
+var l logger = NewLogger()
 
 func udpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	bytes := args.Bytes()
@@ -32,7 +32,7 @@ func udpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	stats.SetDataTransferred(len(floodString))
 
 	if args.Logger() {
-		logToFile(host)
+		l.Add(host)
 	}
 
 	// close the connection as we do not reuse it
@@ -83,7 +83,7 @@ func httpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	}
 
 	if args.Logger() {
-		logToFile(host)
+		l.Add(host)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -103,6 +103,8 @@ func httpRequests(hosts []string, args Arguments, stats Statistics) bool {
 
 func Request(hosts []string, args Arguments, stats Statistics) {
 	go func() {
+		defer l.Close()
+
 		for {
 			start := NowUnixMilli()
 
