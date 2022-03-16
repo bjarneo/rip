@@ -45,13 +45,13 @@ http://localhost:5000/dis-is-nice
 http://localhost:5000/yas
 
 # RIP
-rip -interval 10 -hosts hosts.txt
+rip --interval=10 --hosts=hosts.txt
 
 #### Using UDP flood attack
-rip -interval 10 -concurrent 10 -udp -udp-bytes 4096 0.0.0.0:30000
+rip --interval=10 --concurrent=10 --udp --udp-bytes=4096 0.0.0.0:30000
 
 #### Using a JSON payload for POST requests
-rip -interval 10 -concurrent 10 -post -json payload.json http://localhost:5000/login
+rip --interval=10 --concurrent=10 --post --json=payload.json http://localhost:5000/login
 
 #### Example using custom headers
 touch headers.txt
@@ -61,36 +61,36 @@ X-Real-Ip: 192.168.0.1
 Authorization: Basic aGV5OnlvdQo=
 
 # RIP
-rip -interval 10 -concurrent 10 -headers headers.txt http://localhost:5000
+rip --interval=10 --concurrent=10 --headers=headers.txt http://localhost:5000
 ```
 
 ### The default values
 
 ```bash
 Usage of RIP
-  -concurrent int
+  --concurrent int
         How many concurrent users to simulate (default 10)
-  -hosts string
+  --hosts string
         A file of hosts. Each host should be on a new line. It will randomly choose a host. (default "")
-  -headers string
+  --headers string
         Path to the headers file (default "")
-  -interval int
+  --interval int
         How many seconds to run the test (default 60)
-  -json string
+  --json string
         Path to the JSON payload file to be used for the HTTP requests (default "")
-  -logger bool
+  --logger bool
         Log the requests to $HOME/rip.log (default false)
-  -patch bool
+  --patch bool
         PATCH HTTP request (default false)
-  -post bool
+  --post bool
         POST HTTP request (default false)
-  -put bool
+  --put bool
         PUT HTTP request (default false)
-  -proxy string
+  --proxy string
         The proxy URL to route the traffic (default "")
-  -udp bool
+  --udp bool
         Run requests UDP flood attack and not http requests (default false)
-  -udp-bytes int
+  --udp-bytes int
         Set the x bytes for the UDP flood attack (default 2048)
 
 
