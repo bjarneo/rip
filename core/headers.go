@@ -22,18 +22,16 @@ func ParseHeaders(headersFileContent []string) headers {
 		headers: make(map[string]string, 0),
 	}
 
-	h.add("User-Agent", "Rest In Peace")
-
 	for _, line := range headersFileContent {
 		header := pattern.FindStringSubmatch(line)
 
-		h.add(header[1], header[2])
+		h.Add(header[1], header[2])
 	}
 
 	return h
 }
 
-func (h *headers) add(key string, value string) {
+func (h *headers) Add(key string, value string) {
 	h.headers[key] = value
 }
 
