@@ -10,13 +10,14 @@ const (
 	PATTERN = "([a-zA-Z0-9-]+)[^*](.*)"
 )
 
+// Pre define the compiler
+var pattern *regexp.Regexp = regexp.MustCompile(PATTERN)
+
 type headers struct {
 	headers map[string]string
 }
 
 func ParseHeaders(headersFileContent []string) headers {
-	pattern := regexp.MustCompile(PATTERN)
-
 	h := headers{
 		headers: make(map[string]string, 0),
 	}
