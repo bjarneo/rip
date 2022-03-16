@@ -9,7 +9,7 @@ import (
 )
 
 // Initialize the cli arguments
-var args core.Arguments = core.Args()
+var args core.Arguments = core.NewArgs()
 
 // Initialize our statistics
 var stats core.TotalStatistics = core.NewStatistics()
