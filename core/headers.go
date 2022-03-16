@@ -5,6 +5,7 @@ import (
 )
 
 // This will match <first-group>:<second-group> of a header
+// Test it here https://regex101.com/r/cn0QvY/1
 const (
 	PATTERN = "([a-zA-Z0-9-]+)[^*](.*)"
 )
