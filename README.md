@@ -10,27 +10,27 @@ Looking for new features? Create an issue.
 
 ## Features
 
--   HTTP load testing
--   UDP flood attack
--   Run requests concurrently
--   Set a timer in second for how long it should run
--   Outputs table of statistics for the end result
--   Log the requests to $HOME/rip.log
--   Supports multiple hosts
--   POST/PUT/PATCH HTTP requests
--   HTTP JSON payload
--   Custom HTTP headers
--   Proxy HTTP requests
+- HTTP load testing
+- UDP flood attack
+- Run requests concurrently
+- Set a timer in second for how long it should run
+- Outputs table of statistics for the end result
+- Log the requests to $HOME/rip.log
+- Supports multiple hosts
+- POST/PUT/PATCH HTTP requests
+- HTTP JSON payload
+- Custom HTTP headers
+- Proxy HTTP requests
 
 ## Coming
 
--   UDP payload attachment
--   Form data payload
--   JSON output of the result
+- UDP payload attachment
+- Form data payload
+- JSON output of the result
 
 ## Usage
 
-Install the binary from <https://github.com/bjarneo/rip/releases>, or go directly to the build the binary manually step.
+Install the binary (windows, osx, linux) from <https://github.com/bjarneo/rip/releases>, or go directly to the build the binary manually step.
 
 ```bash
 #### Standard by using one host
@@ -69,29 +69,29 @@ rip -interval 10 -concurrent 10 -headers headers.txt http://localhost:5000
 ```bash
 Usage of RIP
   -concurrent int
-    	How many concurrent users to simulate (default 10)
+        How many concurrent users to simulate (default 10)
   -hosts string
-    	A file of hosts. Each host should be on a new line. It will randomly choose a host. (default "")
- -headers string
-    	Path to the headers file (default "")
+        A file of hosts. Each host should be on a new line. It will randomly choose a host. (default "")
+  -headers string
+        Path to the headers file (default "")
   -interval int
-    	How many seconds to run the test (default 60)
+        How many seconds to run the test (default 60)
   -json string
-    	Path to the JSON payload file to be used for the HTTP requests (default "")
+        Path to the JSON payload file to be used for the HTTP requests (default "")
   -logger bool
-    	Log the requests to $HOME/rip.log (default false)
+        Log the requests to $HOME/rip.log (default false)
   -patch bool
-    	PATCH HTTP request (default false)
+        PATCH HTTP request (default false)
   -post bool
-    	POST HTTP request (default false)
+        POST HTTP request (default false)
   -put bool
-    	PUT HTTP request (default false)
+        PUT HTTP request (default false)
   -proxy string
-    	The proxy URL to route the traffic (default "")
+        The proxy URL to route the traffic (default "")
   -udp bool
-    	Run requests UDP flood attack and not http requests (default false)
+        Run requests UDP flood attack and not http requests (default false)
   -udp-bytes int
-    	Set the x bytes for the UDP flood attack (default 2048)
+        Set the x bytes for the UDP flood attack (default 2048)
 
 
 ```
