@@ -13,8 +13,8 @@ Looking for new features? Create an issue.
 - HTTP load testing
 - UDP flood attack
 - Run requests concurrently
-- Set a timer in second for how long it should run
-- Outputs table of statistics for the end result
+- Set an interval in seconds
+- Continuous statistics output
 - Log the requests to $HOME/rip.log
 - Supports multiple hosts
 - POST/PUT/PATCH HTTP requests
