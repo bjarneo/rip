@@ -14,12 +14,12 @@ const (
 var pattern *regexp.Regexp = regexp.MustCompile(PATTERN)
 
 type headers struct {
-	headers map[string]string
+	entries map[string]string
 }
 
 func ParseHeaders(headersFileContent []string) headers {
 	h := headers{
-		headers: make(map[string]string, 0),
+		entries: make(map[string]string, 0),
 	}
 
 	for _, line := range headersFileContent {
@@ -32,9 +32,9 @@ func ParseHeaders(headersFileContent []string) headers {
 }
 
 func (h *headers) Add(key string, value string) {
-	h.headers[key] = value
+	h.entries[key] = value
 }
 
 func (h *headers) Headers() map[string]string {
-	return h.headers
+	return h.entries
 }
