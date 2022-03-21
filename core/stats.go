@@ -42,7 +42,7 @@ func NewStatistics() TotalStatistics {
 		longest:         0,
 		shortest:        0,
 		elapsedTime:     0,
-		responseTime:    make([]int64, 1, 1),
+		responseTime:    make([]int64, 1),
 		dataTransferred: 0,
 	}
 
