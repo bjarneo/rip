@@ -21,6 +21,7 @@ Looking for new features? Create an issue.
 - HTTP JSON payload
 - Custom HTTP headers
 - Proxy HTTP requests
+- Limit the requests per concurrent user
 
 ## Coming
 
@@ -70,6 +71,8 @@ rip --interval=10 --concurrent=10 --headers=headers.txt http://localhost:5000
 Usage of RIP
   --concurrent int
         How many concurrent users to simulate (default 10)
+  --requests int
+        Max requests per concurrent user at a time (default 0 which means disabled)
   --hosts string
         A file of hosts. Each host should be on a new line. It will randomly choose a host. (default "")
   --headers string

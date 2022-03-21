@@ -19,7 +19,7 @@ type headers struct {
 
 func ParseHeaders(headersFileContent []string) headers {
 	h := headers{
-		entries: make(map[string]string, 0),
+		entries: make(map[string]string),
 	}
 
 	for _, line := range headersFileContent {

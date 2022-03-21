@@ -105,10 +105,22 @@ func httpRequests(hosts []string, args Arguments, stats Statistics) bool {
 }
 
 func Request(hosts []string, args Arguments, stats Statistics) {
+	queue := NewQueue(args.Requests())
+
 	go func() {
 		defer l.Close()
 
 		for {
+			// If we limit the requests to x per concurrent user,
+			// run the queue logic
+			if args.Requests() > 0 {
+				if queue.Length() == args.Requests() {
+					continue
+				}
+
+				queue.Push()
+			}
+
 			start := NowUnixMilli()
 
 			stats.SetTotal(1)
@@ -127,6 +139,11 @@ func Request(hosts []string, args Arguments, stats Statistics) {
 			stats.SetResponseTime(stop - start)
 			stats.SetShortest(stop - start)
 			stats.SetLongest(stop - start)
+
+			// Pop one request from the queue after the request is done
+			if args.Requests() > 0 && queue.Length() == args.Requests() {
+				queue.Pop()
+			}
 		}
 	}()
 }
