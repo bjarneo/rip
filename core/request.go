@@ -117,6 +117,7 @@ func Request(hosts []string, args Arguments, stats Statistics) {
 				if queue.Length() == args.Requests() {
 					continue
 				}
+
 				queue.Push()
 			}
 

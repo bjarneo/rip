@@ -37,7 +37,7 @@ func NewArgs() Arguments {
 		json:       flag.String("json", "", "Path to the JSON payload file to be used for the HTTP requests"),
 		headers:    flag.String("headers", "", "Path to the headers file"),
 		proxy:      flag.String("proxy", "", "The proxy URL to route the traffic"),
-		requests:   flag.Int("requests", 0, "Max requests per concurrent user"),
+		requests:   flag.Int("requests", 0, "Max requests per concurrent user at a time"),
 	}
 
 	flag.Parse()
