@@ -110,7 +110,7 @@ func Request(hosts []string, args Arguments, stats Statistics) {
 	go func() {
 		defer l.Close()
 
-		for {
+		for queue.Length() != args.Requests() || args.Requests() == 0 {
 			// If we limit the requests to x per concurrent user,
 			// run the queue logic
 			if args.Requests() > 0 {
@@ -141,7 +141,7 @@ func Request(hosts []string, args Arguments, stats Statistics) {
 			stats.SetLongest(stop - start)
 
 			// Pop one request from the queue after the request is done
-			if args.Requests() > 0 && queue.Length() == args.Requests() {
+			if args.Requests() > 0 {
 				queue.Pop()
 			}
 		}
