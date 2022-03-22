@@ -4,7 +4,7 @@ import (
 	"sync"
 )
 
-var mutex sync.Mutex
+var queueMutex sync.Mutex
 
 type queue struct {
 	requests []int
@@ -21,8 +21,8 @@ func NewQueue(limit int) queue {
 }
 
 func (q *queue) Push() int {
-	mutex.Lock()
-	defer mutex.Unlock()
+	queueMutex.Lock()
+	defer queueMutex.Unlock()
 
 	length := len(q.requests)
 
@@ -37,6 +37,9 @@ func (q *queue) Push() int {
 }
 
 func (q *queue) Pop() {
+	queueMutex.Lock()
+	defer queueMutex.Unlock()
+
 	q.requests = q.requests[:len(q.requests)-1]
 }
 
