@@ -70,9 +70,8 @@ func workers(concurrent int, interval int, hosts []string) {
 func main() {
 	// Initialize the logger
 	logger := core.NewLogger()
+	defer logger.Close()
 
 	// Run until the interval is done
 	workers(args.Concurrent(), args.Interval(), args.Hosts())
-
-	logger.Close()
 }
