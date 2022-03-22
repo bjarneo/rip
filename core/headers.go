@@ -16,7 +16,6 @@ var pattern *regexp.Regexp = regexp.MustCompile(PATTERN)
 
 type headers struct {
 	entries map[string]string
-	mu      sync.Mutex
 }
 
 // Holder for our singelton instance
@@ -30,9 +29,6 @@ func ParseHeaders(args Arguments) *headers {
 		headerInstance = &headers{
 			entries: make(map[string]string),
 		}
-
-		headerInstance.mu.Lock()
-		defer headerInstance.mu.Unlock()
 
 		for _, line := range args.Headers() {
 			header := pattern.FindStringSubmatch(line)
