@@ -1,6 +1,7 @@
 package core
 
 import (
+	"log"
 	"math/rand"
 	"os"
 	"strings"
@@ -34,7 +35,7 @@ func FileContent(filename string) string {
 	data, err := os.ReadFile(filename)
 
 	if err != nil {
-		panic(err)
+		log.Fatalf("Unable to read file: %v", err)
 	}
 
 	return string(data)

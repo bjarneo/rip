@@ -2,6 +2,7 @@ package core
 
 import (
 	"regexp"
+	"sync"
 )
 
 // This will match <first-group>:<second-group> of a header
@@ -15,20 +16,42 @@ var pattern *regexp.Regexp = regexp.MustCompile(PATTERN)
 
 type headers struct {
 	entries map[string]string
+	mu      sync.Mutex
 }
 
-func ParseHeaders(headersFileContent []string) headers {
-	h := headers{
-		entries: make(map[string]string),
-	}
+// Holder for our singelton instance
+var headerInstance *headers
 
-	for _, line := range headersFileContent {
-		header := pattern.FindStringSubmatch(line)
+var once sync.Once
 
-		h.Add(header[1], header[2])
-	}
+func ParseHeaders(args Arguments) *headers {
+	// This will run only once
+	once.Do(func() {
+		headerInstance = &headers{
+			entries: make(map[string]string),
+		}
 
-	return h
+		headerInstance.mu.Lock()
+		defer headerInstance.mu.Unlock()
+
+		for _, line := range args.Headers() {
+			header := pattern.FindStringSubmatch(line)
+
+			headerInstance.Add(header[1], header[2])
+		}
+
+		if args.IsJSONPayload() {
+			headerInstance.Add("Content-Type", "application/json; charset=UTF-8")
+		}
+
+		headerInstance.Add("User-Agent", "Rest In Peace")
+	})
+
+	return headerInstance
+}
+
+func HeaderInstance() *headers {
+	return headerInstance
 }
 
 func (h *headers) Add(key string, value string) {

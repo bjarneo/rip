@@ -52,13 +52,7 @@ func httpRequests(hosts []string, args Arguments, stats Statistics) bool {
 		return false
 	}
 
-	headers := ParseHeaders(args.Headers())
-
-	if args.IsJSONPayload() {
-		headers.Add("Content-Type", "application/json; charset=UTF-8")
-	}
-
-	headers.Add("User-Agent", "Rest In Peace")
+	headers := HeaderInstance()
 
 	// Iterate through our custom headers, and add them to the request
 	for key, value := range headers.Headers() {

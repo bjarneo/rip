@@ -19,6 +19,8 @@ func workers(concurrent int, interval int, hosts []string) {
 	start := core.NowUnixMilli()
 	end := core.FutureUnixMilli(interval)
 
+	core.ParseHeaders(args)
+
 	area, _ := pterm.DefaultArea.Start()
 
 	var wg sync.WaitGroup
