@@ -2,6 +2,7 @@ package core
 
 import (
 	"regexp"
+	"strings"
 	"sync"
 )
 
@@ -33,7 +34,7 @@ func ParseHeaders(args Arguments) *headers {
 		for _, line := range args.Headers() {
 			header := pattern.FindStringSubmatch(line)
 
-			headerInstance.Add(header[1], header[2])
+			headerInstance.Add(header[1], strings.Trim(header[2], " "))
 		}
 
 		if args.IsJSONPayload() {

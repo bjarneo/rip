@@ -27,6 +27,18 @@ func homeFolder() string {
 	return dirname
 }
 
+func headerString() string {
+	headers := HeaderInstance()
+	asString := ""
+
+	// Iterate through our custom headers, and add them to the request
+	for key, value := range headers.Headers() {
+		asString += fmt.Sprintf(` "%s: %s"`, key, value)
+	}
+
+	return asString
+}
+
 // Logger writes each request to $HOME/rip.log.
 func NewLogger() *logger {
 	var once sync.Once
@@ -55,9 +67,10 @@ func (l *logger) Add(request string) {
 
 	// use ISO8601 formatting
 	logString := fmt.Sprintf(
-		`[%s] - "%s"`,
+		`[%s] - "%s" -%s`,
 		time.Now().UTC().Format("2006-01-02T15:04:05-0700"),
 		request,
+		headerString(),
 	)
 
 	fmt.Fprintln(l.file, logString)

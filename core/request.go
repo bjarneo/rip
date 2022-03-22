@@ -2,6 +2,7 @@ package core
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"net"
 	"net/http"
@@ -80,7 +81,7 @@ func httpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	}
 
 	if args.Logger() {
-		logger.Add(host)
+		logger.Add(fmt.Sprintf("%s %s", args.HTTPMethod(), host))
 	}
 
 	body, err := io.ReadAll(resp.Body)
