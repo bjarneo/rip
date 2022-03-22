@@ -10,11 +10,9 @@ import (
 	"github.com/dchest/uniuri"
 )
 
-// Initialize the logger
-var l logger = NewLogger()
-
 func udpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	bytes := args.Bytes()
+	logger := Logger()
 
 	host := RandomSlice(hosts)
 
@@ -32,7 +30,7 @@ func udpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	stats.SetDataTransferred(len(floodString))
 
 	if args.Logger() {
-		l.Add(host)
+		logger.Add(host)
 	}
 
 	// close the connection as we do not reuse it
@@ -43,6 +41,8 @@ func udpRequests(hosts []string, args Arguments, stats Statistics) bool {
 
 func httpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	host := RandomSlice(hosts)
+
+	logger := Logger()
 
 	req, err := http.NewRequest(args.HTTPMethod(), host, bytes.NewBuffer(args.JSONPayload()))
 
@@ -80,7 +80,7 @@ func httpRequests(hosts []string, args Arguments, stats Statistics) bool {
 	}
 
 	if args.Logger() {
-		l.Add(host)
+		logger.Add(host)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -102,8 +102,6 @@ func Request(hosts []string, args Arguments, stats Statistics) {
 	queue := NewQueue(args.Requests())
 
 	go func() {
-		defer l.Close()
-
 		for queue.Length() != args.Requests() || args.Requests() == 0 {
 			// If we limit the requests to x per concurrent user,
 			// run the queue logic

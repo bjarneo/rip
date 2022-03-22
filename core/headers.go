@@ -22,9 +22,9 @@ type headers struct {
 // Holder for our singelton instance
 var headerInstance *headers
 
-var once sync.Once
-
 func ParseHeaders(args Arguments) *headers {
+	var once sync.Once
+
 	// This will run only once
 	once.Do(func() {
 		headerInstance = &headers{

@@ -4,14 +4,18 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 	"time"
 )
 
 type logger struct {
 	file *os.File
+	mu   sync.Mutex
 }
 
 var logPath string = fmt.Sprintf("%s/rip.log", homeFolder())
+
+var loggerInstance *logger
 
 func homeFolder() string {
 	dirname, err := os.UserHomeDir()
@@ -24,20 +28,31 @@ func homeFolder() string {
 }
 
 // Logger writes each request to $HOME/rip.log.
-func NewLogger() logger {
-	f, err := os.Create(logPath)
-	if err != nil {
-		panic(err)
-	}
+func NewLogger() *logger {
+	var once sync.Once
 
-	l := logger{
-		file: f,
-	}
+	once.Do(func() {
+		f, err := os.Create(logPath)
+		if err != nil {
+			panic(err)
+		}
 
-	return l
+		loggerInstance = &logger{
+			file: f,
+		}
+	})
+
+	return loggerInstance
+}
+
+func Logger() *logger {
+	return loggerInstance
 }
 
 func (l *logger) Add(request string) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
 	// use ISO8601 formatting
 	logString := fmt.Sprintf(
 		`[%s] - "%s"`,
