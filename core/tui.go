@@ -5,6 +5,13 @@ import (
 	"strings"
 
 	"github.com/pterm/pterm"
+
+	_ "embed"
+)
+
+var (
+	//go:embed banner.txt
+	logo string
 )
 
 func template(name string, value string) string {
@@ -17,16 +24,7 @@ func template(name string, value string) string {
 }
 
 func Logo() string {
-	logo := `
-
-  ___ ___ ___
- | _ \_ _| _ \
- |   /| ||  _/
- |_|_\___|_|
-
-`
-
-	return pterm.DefaultCenter.Sprint(logo)
+	return pterm.DefaultCenter.Sprint(string(logo))
 }
 
 func PrintStats(stats Statistics) string {
