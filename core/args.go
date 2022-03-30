@@ -4,6 +4,12 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"sync"
+)
+
+var (
+	payloadData []byte = []byte("")
+	doOnce      sync.Once
 )
 
 type Arguments struct {
@@ -108,13 +114,13 @@ func (flags *Arguments) IsJSONPayload() bool {
 }
 
 func (flags *Arguments) JSONPayload() []byte {
-	if *flags.json != "" {
-		payload := FileContent(*flags.json)
+	doOnce.Do(func() {
+		if *flags.json != "" {
+			payloadData = []byte(FileContent(*flags.json))
+		}
+	})
 
-		return []byte(payload)
-	}
-
-	return []byte("")
+	return payloadData
 }
 
 func (flags *Arguments) Headers() []string {
