@@ -37,6 +37,8 @@ func Execute() {
 		// Run the for loop once a second
 		time.Sleep(time.Second * time.Duration(1))
 
+		stats.SetElapsedTime(NowUnixMilli() - start)
+
 		area.Update(Logo() + PrintStats(&stats))
 
 		if NowUnixMilli() < end {
